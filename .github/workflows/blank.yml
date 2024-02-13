@@ -8,10 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Node.js
-        run: echo Hello, world!
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.9.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Build Task
+        run: npm build
 
   deploy:
     needs: build
@@ -21,7 +30,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
-          username: yongwon
+          username: cywin
           port: ${{ secrets.REMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
