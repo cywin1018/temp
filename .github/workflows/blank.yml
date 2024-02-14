@@ -10,6 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 추가: Git 초기화
+      - name: Initialize Git
+        run: git init
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -34,6 +38,7 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cd ${{ secrets.REMOTE_TARGET }}
             git pull origin ${{ github.ref_name }}
             docker-compose down ${{ secrets.DOCKER_IMAGE_NAME }}
             docker-compose build ${{ secrets.DOCKER_IMAGE_NAME }}
