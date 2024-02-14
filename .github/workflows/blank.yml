@@ -38,7 +38,6 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.REMOTE_TARGET }}
             git pull origin ${{ github.ref_name }}
             docker-compose down ${{ secrets.DOCKER_IMAGE_NAME }}
             docker-compose build ${{ secrets.DOCKER_IMAGE_NAME }}
