@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -8,7 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -26,7 +27,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Server
+      - name: Deploy to Docker
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -36,6 +37,6 @@ jobs:
           script: |
             cd ~/temp
             git pull origin ${{ github.ref_name }}
-            docker-compose down ${{ secrets.DOCKER_IMAGE_NAME }}
-            docker-compose build ${{ secrets.DOCKER_IMAGE_NAME }}
-            docker-compose up -d ${{ secrets.DOCKER_IMAGE_NAME }}
+            docker down ${{ secrets.DOCKER_IMAGE_NAME }}
+            docker build ${{ secrets.DOCKER_IMAGE_NAME }}
+            docker up -d ${{ secrets.DOCKER_IMAGE_NAME }}
