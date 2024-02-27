@@ -36,4 +36,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/temp
-            git pull origin ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }} 
+            docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
